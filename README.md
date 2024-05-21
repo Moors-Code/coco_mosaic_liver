@@ -10,6 +10,4 @@ Code used in the manuscript "​​​​In vivo screening of tumor-hepatocyte i
 - Molecular Cartography (Resolve) data analysis (Extended Data Figures 5 and 9)
 - bulk RNA sequencing (Extended Data Figures 5, 6, and 8)
 
-Raw data can be found here:
-
-Processed data can be found here: https://zenodo.org/records/7737591 
+Raw data and processed data can be found at the Gene Expression Omnibus under the accession numbers GSE267981 and GSE267982 and the Zenodo repository: 10.5281/zenodo.7737590.
