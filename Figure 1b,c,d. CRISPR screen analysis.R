@@ -296,6 +296,7 @@ VolcanoView(gdata3, x = "Score", y = "FDR", Label = "id", x_cut = 0.05, y_cut = 
 #---------------------------––-----------------------------––-----------------------------––-----------------------------––-------------------------#
 
 #8. PAIRED ANALYSIS OF ALL MICE AND BATCHES (Fig 1)
+#please disregard Source data for Fig 1b and instead download the paired_proximal_distal.gene_summary.csv file from this github page. 
 
 SPH1_2_3 <- list(`3174.count_normalized` ,`3068.count_normalized`, `3039.count_normalized`, 
                  `3379.count_normalized`, `3425.count_normalized`, `3434.count_normalized`, 
@@ -340,7 +341,7 @@ ggplot(data=paired_proximal_distal.gene_summary, aes(x=pos.lfc, y=-log10(pos.p.v
   geom_point() + 
   theme_classic()
 
-#barplot by score 
+#barplot by logfc 
 neg<-which(paired_proximal_distal.gene_summary$neg.lfc<0)
 pos<-which(paired_proximal_distal.gene_summary$pos.lfc>0)
 colnames(paired_proximal_distal.gene_summary)
@@ -348,21 +349,17 @@ neg_data <- paired_proximal_distal.gene_summary[neg, c(1,8)]
 head(neg_data)
 pos_data <- paired_proximal_distal.gene_summary[pos, c(1,14)]
 head(pos_data)
-colnames(pos_data) <-  c("id" ,"Score"   )
-colnames(neg_data) <-  c("id" ,"Score"   )
+colnames(pos_data) <-  c("id" ,"lfc"   )
+colnames(neg_data) <-  c("id" ,"lfc"   )
 plot_data <-rbind(neg_data, pos_data)
 #View(plot_data)
 plot_data$group <- ifelse(plot_data$lfc < 0, "neg", "pos")
-reduced_plot_data <- plot_data %>%
-  group_by(group) %>%
-  top_n(n = 10, wt = abs(Score))
-reduced_plot_data
 
-ggplot(data=reduced_plot_data, aes(x=reorder(id, Score),y= score,  fill=group)) +
+ggplot(data=plot_data %>%group_by(group), aes(x=reorder(id, lfc),y= lfc,  fill=group)) +
   geom_bar(stat="identity")+
-  theme_classic() + scale_fill_manual(values=c('#81C341','#D12026'))+ coord_flip()+
-  ggsave("SPH123_allpaired_score.pdf", width = 5, height = 4)
-
+  theme_classic() + scale_fill_manual(values=c('#81C341','#D12026'))+
+  theme(axis.text.x = element_text(angle = 90))#+
+  ggsave("SPH123_allpaired_score_allgenes.pdf", width = 10, height = 4)
 
 #gene set enrichment analysis
 library(fgsea)
